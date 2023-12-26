@@ -1,0 +1,31 @@
+---
+# tasks file for mysql_db.yml
+
+    - name: Install and Configure Database
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - mysql-server
+        - mysql-client
+
+    - name: Start Database Service
+      ansible.builtin.service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Create database and database users
+      community.mysql.mysql_db:
+        name: employee123_db
+        state: present
+        login_user: root
+        login_password: Passw0rd
+
+    - name: Create a database user
+      community.mysql.mysql_user:
+        name: db_user
+        password: Passw0rd
+        priv: '*.*:ALL'
+        state: present
+
